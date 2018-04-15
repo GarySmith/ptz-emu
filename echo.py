@@ -9,22 +9,25 @@ def listen():
     connection.listen(10)
     while True:
         current_connection, address = connection.accept()
+        print("New connection")
         while True:
             data = current_connection.recv(2048)
+            print("New data")
+            datastr = data.decode('utf-8')
 
-            if data == 'quit\n':
+            if datastr == 'quit\n':
                 current_connection.shutdown(1)
                 current_connection.close()
                 break
 
-            elif data == 'stop\n':
+            elif datastr == 'stop\n':
                 current_connection.shutdown(1)
                 current_connection.close()
                 exit()
 
             elif data:
                 current_connection.send(data)
-                print(data)
+                print(datastr, end='')
 
 
 if __name__ == "__main__":

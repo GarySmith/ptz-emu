@@ -3,31 +3,34 @@
 import socket
 
 def listen():
-    connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    connection.bind(('0.0.0.0', 5555))
-    connection.listen(10)
-    while True:
-        current_connection, address = connection.accept()
-        print("New connection")
+    HOST = ''                # Symbolic name meaning all available interfaces
+    PORT = 5555              # Arbitrary non-privileged port
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind((HOST, PORT))
+        s.listen(1)
         while True:
-            data = current_connection.recv(2048)
-            print("New data")
-            datastr = data.decode('utf-8')
+            conn, addr = s.accept()
+            with conn:
+                while True:
+                    data = conn.recv(1024)
+                    if not data:
+                        break
 
-            if datastr == 'quit\n':
-                current_connection.shutdown(1)
-                current_connection.close()
-                break
+                    datastr = data.decode('utf-8')
 
-            elif datastr == 'stop\n':
-                current_connection.shutdown(1)
-                current_connection.close()
-                exit()
+                    if datastr == 'quit\n':
+                        conn.shutdown(1)
+                        conn.close()
+                        break
 
-            elif data:
-                current_connection.send(data)
-                print(datastr, end='')
+                    elif datastr == 'stop\n':
+                        conn.shutdown(1)
+                        conn.close()
+                        exit()
+
+                    elif data:
+                        conn.send(data)
+                        # print(datastr, end='')
 
 
 if __name__ == "__main__":

@@ -26,9 +26,9 @@ presets = [
         'PANTILT': [ 0x90, 0x50, 0x00, 0x00, 0x00, 0x0F, 0x0F, 0x0F, 0x0B, 0x09, 0xFF ],
     },
     {
-        'FOCUS': [ 0x90, 0x50, 0x00, 0x01, 0x0D, 0x0D, 0xFF ],
-        'ZOOM' : [ 0x90, 0x50, 0x02, 0x0F, 0x0F, 0x0D, 0xFF ],
-        'PANTILT': [ 0x90, 0x50, 0x00, 0x00, 0x00, 0x0F, 0x0F, 0x0F, 0x0B, 0x09, 0xFF ],
+        'FOCUS': [ 0x90, 0x50, 0x00, 0x02, 0x05, 0x05, 0xFF ],
+        'ZOOM' : [ 0x90, 0x50, 0x02, 0x0A, 0x0E, 0x02, 0xFF ],
+        'PANTILT': [ 0x90, 0x50, 0x00, 0x00, 0x07, 0x05, 0x0F, 0x0F, 0x0B, 0x06, 0xFF ],
     },
 ]
 
@@ -57,19 +57,19 @@ def listen():
                     #import pdb; pdb.set_trace()
                     if data == INQ_FOCUS:
                         d = presets[current_preset]['FOCUS']
-                        #print("Responding to INQ_FOCUS with", d)
+                        print("Responding to INQ_FOCUS with", d)
                         conn.sendall(bytes(d))
                         break
 
                     elif data == INQ_ZOOM:
                         d = presets[current_preset]['ZOOM']
-                        #print("Responding to INQ_ZOOM with", d)
+                        print("Responding to INQ_ZOOM with", d)
                         conn.sendall(bytes(d))
                         break
 
                     elif data == INQ_PANTILT:
                         d = presets[current_preset]['PANTILT']
-                        #print("Responding to INQ_PANTILT with", d)
+                        print("Responding to INQ_PANTILT with", d)
                         conn.sendall(bytes(d))
                         break
 
@@ -77,7 +77,7 @@ def listen():
                         data[6] == RECALL_PRESET[6]:
 
                         current_preset = data[5]
-                        #print("Recall preset", current_preset)
+                        print("Recall preset", current_preset)
                         conn.sendall(bytes(RECALL_PRESET_RESP))
 
 

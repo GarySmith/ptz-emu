@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from time import sleep
 import socket
 
 INQ_FOCUS = [ 0x81, 0x09, 0x04, 0x48, 0xFF ]
@@ -77,8 +78,14 @@ def listen():
                         data[6] == RECALL_PRESET[6]:
 
                         current_preset = data[5]
+                        if current_preset < 0:
+                            current_preset = 0
+                        elif current_preset >= len(presets):
+                            current_preset = len(presets) - 1
+
                         print("Recall preset", current_preset)
                         conn.sendall(bytes(RECALL_PRESET_RESP))
+                        sleep(0.5)
 
 
 if __name__ == "__main__":
